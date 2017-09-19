@@ -15,38 +15,35 @@ export default class GetImageForm extends Component {
       rover: "Curiosity",
       camera: "FHAZ",
       images: [],
-      sol: "",
+      sol: "1000",
     }
 
     this.fetchRoverImage = this.fetchRoverImage.bind(this);
     this.handleCamera = this.handleCamera.bind(this);
-    this.handleCameraSol = this.handleCameraSol.bind(this);
+    this.handleSol = this.handleSol.bind(this);
     this.handleRover = this.handleRover.bind(this);
 
 }
 
-
     handleCamera(e) {
-      e.preventDefault();
       this.setState(
         {
-          camera: this.state.value,
+          camera: e.target.value,
         })
     }
 
     handleSol(e) {
-      e.preventDefault();
       this.setState(
         {
-          sol: this.state.value,
+          sol: e.target.value,
         })
     }
 
     handleRover(e) {
-      console.log(e)
+      console.log(e.target.value)
       this.setState(
         {
-          // rover: this.state.value,
+          rover: e.target.value,
         })
     }
 
@@ -63,13 +60,12 @@ export default class GetImageForm extends Component {
 
       let imageUrl = `https://api.nasa.gov/mars-photos/api/v1/rovers/${rove}/photos?sol=${num}&camera=${cam}&api_key=${API_KEY}`;
 
-      fetch('imageUrl')
+      fetch(imageUrl)
         .then(r => r.json())
-        .then((json) => {
-          console.log("Data from componentWillMount fetch", json)
-            let pics = json.pics;
+        .then((data) => {
+          console.log(data.photos)
           this.setState({
-            pics: pics
+            images: data.photos
           });
         })
     }
@@ -78,7 +74,7 @@ export default class GetImageForm extends Component {
 
     return (
   <div>
-    <form onSubmit={this.fetchRoverImage}>
+    <form>
       <label htmlFor="rover">Rover</label>
       <select onChange={this.handleRover} id="rover" value={this.state.value}>
         <option value="Curiosity">Curiosity</option>
@@ -92,10 +88,10 @@ export default class GetImageForm extends Component {
         <option value="navcam">NAVCAM (Navigation Cam)</option>
       </select>
       <label htmlFor="sol">Martian Sol: 1000-2000</label>
-      <input type="number" onChange={this.fetchRoverImage} max="2000" min="1000" value={this.state.value}/>
+      <input type="number" onChange={this.handleSol} max="2000" min="1000" value={this.state.sol}/>
     </form>
-    <GetImageButton/>
-    <ImageDisplay/>
+    <GetImageButton click={this.fetchRoverImage}/>
+    <ImageDisplay images={this.state.images}/>
   </div>
     );
   }

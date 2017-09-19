@@ -2,14 +2,18 @@ import React, { Component } from 'react';
 
 export default class ImageDisplay extends Component {
   render() {
-    let images = fetchRoverImage.map((images) => {
+    let photos = this.props.images.map( (photo, index) => {
+      return (
+        <div key={index}>
+          <img src={photo.img_src} alt='img'></img>
+        </div>
+      );
+    });
+
     return (
       <div>
-        <img src={this.props.images}>
-        </img>
+        {photos}
       </div>
-
     );
-  )}
   }
 }

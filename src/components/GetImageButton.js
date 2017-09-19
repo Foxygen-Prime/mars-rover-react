@@ -4,7 +4,7 @@ export default class GetImageButton extends Component {
   render() {
     return (
       <div>
-        <input type="submit" onClick={this.props.fetchroverimage}/>
+        <button onClick={this.props.click}>Submit</button>
       </div>
 
     );
