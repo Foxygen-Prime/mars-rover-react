@@ -8,7 +8,8 @@ const API_KEY = apiKey;
 console.log(API_KEY);
 
 export default class GetImageForm extends Component {
-  render() {
+  constructor(props){
+    super(props);
 
     this.state = {
       rover: "Curiosity",
@@ -22,13 +23,8 @@ export default class GetImageForm extends Component {
     this.handleCameraSol = this.handleCameraSol.bind(this);
     this.handleRover = this.handleRover.bind(this);
 
-    fetchRoverImage(e) {
-      e.preventDefault();
-      this.setState(
-        {
-          images: this.state.value,
-        })
-    }
+}
+
 
     handleCamera(e) {
       e.preventDefault();
@@ -47,31 +43,38 @@ export default class GetImageForm extends Component {
     }
 
     handleRover(e) {
-      e.preventDefault();
+      console.log(e)
       this.setState(
         {
-          rover: this.state.value,
+          // rover: this.state.value,
         })
     }
 
-    componentWillMount() {
+    fetchRoverImage(e) {
+      this.setState(
+        {
+        camera: this.state.camera,
+        rover: this.state.rover,
+        sol: this.state.sol});
 
-      this.setState({camera: this.state.camera, rover: this.state.rover, sol: this.state.sol});
       let cam = this.state.camera;
       let rove = this.state.rover;
       let num = this.state.sol;
+
       let imageUrl = `https://api.nasa.gov/mars-photos/api/v1/rovers/${rove}/photos?sol=${num}&camera=${cam}&api_key=${API_KEY}`;
 
       fetch('imageUrl')
         .then(r => r.json())
         .then((json) => {
           console.log("Data from componentWillMount fetch", json)
-            let vehicles = json.results;
+            let pics = json.pics;
           this.setState({
-            vehicles: vehicles
-          })
+            pics: pics
+          });
         })
     }
+
+  render() {
 
     return (
   <div>
@@ -89,14 +92,11 @@ export default class GetImageForm extends Component {
         <option value="navcam">NAVCAM (Navigation Cam)</option>
       </select>
       <label htmlFor="sol">Martian Sol: 1000-2000</label>
-      <input type="button" onChange={this.fetchRoverImage} max="2000" min="1000" value={this.state.value}/>
+      <input type="number" onChange={this.fetchRoverImage} max="2000" min="1000" value={this.state.value}/>
     </form>
-  <div>
-
-
-
-      <GetImageButton>
-
+    <GetImageButton/>
+    <ImageDisplay/>
+  </div>
     );
   }
 }

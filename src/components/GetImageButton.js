@@ -4,7 +4,7 @@ export default class GetImageButton extends Component {
   render() {
     return (
       <div>
-        <input type="submit"class="btn btn-warning" onClick="message:"{this.props.fetchroverimage}/>
+        <input type="submit" onClick={this.props.fetchroverimage}/>
       </div>
 
     );
